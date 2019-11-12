@@ -57,6 +57,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import solver.FlowHeuristic;
 import solver.GreedyHeuristic;
 
 /**
@@ -351,8 +352,9 @@ public class ControlActions {
     }
 
     private void runFlowHeuristic(String crf, String numYears, String capacityTarget, int modelVersion) {
-        generateMPSFile(crf, numYears, capacityTarget, modelVersion, "f");
-        runCPLEX();
+        //generateMPSFile(crf, numYears, capacityTarget, modelVersion, "f");
+        //runCPLEX();
+        FlowHeuristic.run(data, Double.parseDouble(crf), Integer.parseInt(numYears), Double.parseDouble(capacityTarget), basePath, dataset, scenario);
     }
 
     public void runCPLEX() {
