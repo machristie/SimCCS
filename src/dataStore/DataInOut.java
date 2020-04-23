@@ -137,8 +137,10 @@ public class DataInOut {
 
         String path = basePath + "/" + dataset + "/BaseData/CostNetwork/Construction Costs.csv";
 
+        long startTime = System.nanoTime();
         // Load construction costs from csv file.
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            System.out.println("Loading " + path);
             // Create construction costs array.
             constructionCosts = new double[data.getWidth() * data.getHeight() + 1][8];
             for (int i = 0; i < constructionCosts.length; i++) {
@@ -183,6 +185,8 @@ public class DataInOut {
 
                 line = br.readLine();
             }
+            long endTime = System.nanoTime();
+            System.out.println("Load construction csv file: " + (endTime - startTime)/1e9 + " s");
 
         } catch (IOException e) {
             // Load construction costs from text file.
@@ -249,7 +253,10 @@ public class DataInOut {
 
         // Load routing costs.
         path = basePath + "/" + dataset + "/BaseData/CostNetwork/Routing Costs.txt";
+        startTime = System.nanoTime();
         routingCosts = new double[data.getWidth() * data.getHeight() + 1][8];
+        long endTime = System.nanoTime();
+        System.out.println("Setup routing costs array: " + (endTime - startTime)/1e9 + " s");
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             for (int i = 0; i < routingCosts.length; i++) {
                 for (int j = 0; j < routingCosts[i].length; j++) {
@@ -273,6 +280,7 @@ public class DataInOut {
                 line = br.readLine();
             }
         } catch (IOException e) {
+            startTime = System.nanoTime();
             for (int i = 0; i < routingCosts.length; i++) {
                 for (int j = 0; j < routingCosts[i].length; j++) {
                     routingCosts[i][j] = constructionCosts[i][j];
@@ -281,11 +289,16 @@ public class DataInOut {
                     }
                 }
             }
+            endTime = System.nanoTime();
+            System.out.println("Populate routing costs array: " + (endTime - startTime)/1e9 + " s");
         }
 
+        startTime = System.nanoTime();
         data.setConstructionCosts(constructionCosts);
         data.setRightOfWayCosts(rightOfWayCosts);
         data.setRoutingCosts(routingCosts);
+        endTime = System.nanoTime();
+        System.out.println("data.setX() method calls: " + (endTime - startTime)/1e9 + " s");
     }
 
     private void loadSources() {
